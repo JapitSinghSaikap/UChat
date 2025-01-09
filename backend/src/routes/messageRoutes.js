@@ -2,6 +2,7 @@ const express = require("express");
 const {protect}  = require("../middleware/authMiddle")
 const {getMessages, getUsers, sendMessage } = require("../controllers/messageController");
 
+console.log({ getMessages, getUsers, sendMessage });
 
 const router = express.Router();
 
@@ -10,4 +11,4 @@ router.get("/:id", protect, getMessages);
 
 router.post("/send/:id", protect, sendMessage);
 
-exports.module = router;
+module.exports = router;
