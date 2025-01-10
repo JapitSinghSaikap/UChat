@@ -4,7 +4,9 @@ const { generateToken } = require("../lib/configtoken");
 const cloudinary = require("../lib/cloudinary");
 
 exports.signup = async (req, res) => {
-    const { fullName, email, password,profilePic } = req.body;
+    console.log("Request body received in signup route:", req.body);
+    const { fullName, email, password} = req.body;
+
 
     try {
         if (!fullName || !email || !password) {
