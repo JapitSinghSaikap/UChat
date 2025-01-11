@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { authCheck } from "../store/useAuthStore";
+import { authCheck } from "../store/authCheck"; // Fixed import
 import { Camera, Mail, User } from "lucide-react";
 
 const ProfilePage = () => {
@@ -31,15 +31,14 @@ const ProfilePage = () => {
       <div className="max-w-2xl mx-auto p-4 py-8">
         <div className="bg-gray-800 rounded-xl p-6 space-y-8 shadow-lg">
           <div className="text-center">
-            <h1 className="text-2xl font-semibold">Profile</h1>
-            <p className="mt-2 text-gray-400">Your profile information</p>
+            <h1 className="text-2xl font-semibold">Your Profile</h1>
           </div>
 
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
                 src={selectedImg || authUser?.profilePic || "/avatar.png"}
-                alt="Profile"
+                // alt="Profile"x`
                 className="w-32 h-32 rounded-full object-cover border-4 border-gray-700"
               />
               <label

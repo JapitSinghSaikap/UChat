@@ -34,7 +34,7 @@ function App() {
   return (
     <>
       <Toaster position="top-center" className="h-5" reverseOrder={false} />
-      <Navbar/>
+      {/* <Navbar/> */}
       <Routes>
         <Route path='/' element={authUser ? <HomePage/> : <Navigate to="/login"/>}></Route>
         <Route path='/signup' element={<SignUpPage/>}></Route>
