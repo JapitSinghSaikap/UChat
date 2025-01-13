@@ -60,7 +60,7 @@ export const authCheck = create((set) => ({
       updateProfile: async (data) => {
         set({ isUpdatingProfile: true });
         try {
-          const res = await axiosInstance.put("/auth/update-profile", data);
+          const res = await axiosInstance.put("/auth/updateProfile", data);
           set({ authUser: res.data });
           toast.success("Profile updated successfully");
         } catch (error) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navbar } from './components/navbar'
 import {Routes,Route} from "react-router-dom"
-import { HomePage } from './pages/homepage'
+import  HomePage  from './pages/homepage'
 import LoginPage from './pages/loginpage'
 import ProfilePage from './pages/profilepage'
 import { SettingsPage } from './pages/settings'
