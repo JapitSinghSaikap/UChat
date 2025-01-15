@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const { generateToken } = require("../lib/configtoken");
-const cloudinary = require("../lib/cloudinary");
+const cloudinary = require("../lib/cloudinary")
 
 exports.signup = async (req, res) => {
     console.log("Request body received in signup route:", req.body);
@@ -100,34 +100,51 @@ exports.signup = async (req, res) => {
             });
         }
     };
-    
-    exports.updateProfile = async (req, res) => {
-        try {
-          const { profilePic } = req.body;
-          const userId = req.user._id;
-      
-          if (!profilePic) {
-            return res.status(400).json({ message: "Profile picture is required" });
-          }
-      
-          const uploadResponse = await cloudinary.uploader.upload(profilePic);
-      
-          const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { profilePic: uploadResponse.secure_url },
-            { new: true }
-          );
-      
-          if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
-          }
-      
-          res.status(200).json(updatedUser);
-        } catch (error) {
-          console.error("Error in updateProfile:", error.message);
-          res.status(500).json({ message: "Internal server error" });
-        }
-      };
+
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const { profilePic } = req.body;
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+    }
+
+    if (!profilePic) {
+      return res.status(400).json({ message: "Profile picture is required" });
+    }
+
+    console.log("User ID:", userId);
+    console.log("Profile Pic Base64 String:", profilePic);
+
+  
+    let uploadResponse;
+    try {
+      uploadResponse = await cloudinary.uploader.upload(profilePic);
+    } catch (err) {
+      console.error("Cloudinary Upload Error:", err.message);
+      return res.status(500).json({ message: "Failed to upload profile picture" });
+    }
+
+   
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: uploadResponse.secure_url },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error in updateProfile:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 
 
       exports.checkAuth = (req, res) => {

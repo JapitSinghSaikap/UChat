@@ -46,7 +46,6 @@ const ProfilePage = () => {
               <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[#444444]">
                         <img
                           src={selectedImg || authUser?.profilePic || "/avatar.png"}
-                          // alt="Profile"
                           className="w-full h-full object-cover"
                         />
                         {!selectedImg && !authUser?.profilePic && (

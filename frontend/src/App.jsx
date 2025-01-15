@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Navbar } from './components/navbar'
+import  Navbar  from './components/navbar'
 import {Routes,Route} from "react-router-dom"
 import  HomePage  from './pages/homepage'
 import LoginPage from './pages/loginpage'
 import ProfilePage from './pages/profilepage'
-import { SettingsPage } from './pages/settings'
+// import { SettingsPage } from './pages/settings'
 import  SignUpPage  from './pages/signup'
 import { authCheck } from './store/authCheck'
 import {Loader} from "lucide-react";
@@ -37,7 +37,6 @@ function App() {
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />} />
-        <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to="/login" />} />
         <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
     </>
