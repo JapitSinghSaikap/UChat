@@ -1,6 +1,7 @@
 import { chatCheck } from "../store/chatCheck";
+import Sidebar from "../components/sidebar";
 import NoChatSelected from "../components/NoChatSelected";
-import { ChatContainer } from "../components/ChatContainer";
+import {ChatContainer} from "../components/ChatContainer";
 
 const HomePage = () => {
   const { selectedUser } = chatCheck();
@@ -8,8 +9,10 @@ const HomePage = () => {
   return (
     <div className="h-screen bg-[#121212]">
       <div className="flex items-center justify-center pt-20 px-4">
-        <div className="bg-[#181818] rounded-lg shadow-lg w-full max-w-6xl h-[calc(100vh-8rem)]">
-          <div className="flex h-full rounded-lg overflow-hidden">
+        <div className="bg-base-100 rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-8rem)]">
+          <div className="flex h-full rounded-l`g overflow-hidden">
+            <Sidebar />
+
             {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
           </div>
         </div>
@@ -17,5 +20,4 @@ const HomePage = () => {
     </div>
   );
 };
-
 export default HomePage;

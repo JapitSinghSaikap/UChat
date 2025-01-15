@@ -23,7 +23,7 @@ const OTPVerification = () => {
     try {
       const response = await axios.post("/api/verify-otp", { email, otp });
       toast.success(response.data.message);
-      navigate("/login"); // Redirect to login page after OTP verification
+      navigate("/login");
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to verify OTP");
     }

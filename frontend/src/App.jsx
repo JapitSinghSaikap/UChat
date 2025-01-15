@@ -13,37 +13,35 @@ import toast from "react-hot-toast";
 import { Toaster } from 'react-hot-toast';
 
 
-
 function App() {
-
-  const {authUser,checkAuth,isCheckingAuth} = authCheck();
+  const { authUser, checkAuth, isCheckingAuth } = authCheck();
 
   useEffect(() => {
-      checkAuth()
-  },[checkAuth]);
+    checkAuth();
+  }, [checkAuth]);
 
   console.log({ authUser });
 
-  if (isCheckingAuth && !authUser)
+  if (isCheckingAuth)
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
       </div>
-    )
+    );
 
   return (
     <>
       <Toaster position="top-center" className="h-5" reverseOrder={false} />
-      {/* <Navbar/> */}
+      <Navbar/>
       <Routes>
-        <Route path='/' element={authUser ? <HomePage/> : <Navigate to="/login"/>}></Route>
-        <Route path='/signup' element={<SignUpPage/>}></Route>
-        <Route path='/login' element={<LoginPage/>}></Route>
-        <Route path='/settings' element={<SettingsPage/>}></Route>
-        <Route path='/profile' element={<ProfilePage/>}></Route>
+        <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />} />
+        <Route path="/settings" element={authUser ? <SettingsPage /> : <Navigate to="/login" />} />
+        <Route path="/profile" element={authUser ? <ProfilePage /> : <Navigate to="/login" />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

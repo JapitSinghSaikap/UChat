@@ -47,7 +47,7 @@ export const authCheck = create((set) => ({
           const res = await axiosInstance.post("/auth/login", data);
           set({ authUser: res.data });
           toast.success("Logged in successfully");
-          // get().connectSocket(); // Uncomment if using socket
+          // get().connectSocket(); // 
         } catch (error) {
           // Handle undefined error.response safely
           const errorMessage = error.response?.data?.message || "An error occurred while logging in.";

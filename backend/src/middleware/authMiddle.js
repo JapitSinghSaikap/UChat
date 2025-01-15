@@ -4,8 +4,7 @@ const User = require("../models/user.model");
 const protect = async (req,res,next) =>{
     try{
          const token = req.cookies.jwt;
-        //  console.log("JWT token from cookies:", req.cookies.jwt);
-
+        //  console.log("JWT:", req.cookies.jwt);
 
          if(!token){
             return res.status(401).json({message:"No Token Provided"});
