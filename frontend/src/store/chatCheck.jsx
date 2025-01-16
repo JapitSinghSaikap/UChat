@@ -25,6 +25,7 @@ export const chatCheck = create((set, get) => ({
     }
   },
 
+  //messages wali side lane ke liye
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
@@ -37,7 +38,7 @@ export const chatCheck = create((set, get) => ({
     }
   },
 
-
+  //mesage ke ana jana
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     try {
@@ -48,30 +49,39 @@ export const chatCheck = create((set, get) => ({
     }
   },
 
+  // chat mein jane ke liye
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
 
+    const socket = authCheck.getState().socket;
 
-//   subscribeToMessages: () => {
-//     const { selectedUser } = get();
-//     if (!selectedUser) return;
+    if (!socket) {
+      console.error("Socket not initialized yet");
+      return;  
+    }
 
-//     const socket = authCheck.getState().socket;
+    socket.on("newMessage", (newMessage) => {
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
 
-//     socket.on("newMessage", (newMessage) => {
-//       const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-//       if (!isMessageSentFromSelectedUser) return;
+      set({
+        messages: [...get().messages, newMessage],
+      });
+    });
+  },
 
-//       set({
-//         messages: [...get().messages, newMessage],
-//       });
-//     });
-//   },
+  //chat cut krne ke liye
+  unsubscribeFromMessages: () => {
+    const socket = authCheck.getState().socket;
 
+    if (!socket) {
+      console.error("Socket not initialized yet");
+      return;  // Early return if socket isn't available
+    }
 
-
-//   unsubscribeFromMessages: () => {
-//     const socket = authCheck.getState().socket;
-//     socket.off("newMessage");
-//   },
+    socket.off("newMessage");
+  },
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 }));

@@ -1,7 +1,7 @@
 import { chatCheck } from "../store/chatCheck";
 import Sidebar from "../components/sidebar";
 import NoChatSelected from "../components/NoChatSelected";
-import {ChatContainer} from "../components/ChatContainer";
+import ChatContainer from "../components/ChatContainer";
 
 const HomePage = () => {
   const { selectedUser } = chatCheck();

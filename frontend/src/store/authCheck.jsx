@@ -8,7 +8,8 @@ export const authCheck = create((set) => ({
     isSigningUp: false,
     isLoggingIn: false,
     isUpdatingProfile: false,
-
+    onlineUsers: [],
+    
 
     isCheckingAuth: true,
 
@@ -68,6 +69,17 @@ export const authCheck = create((set) => ({
           toast.error(error.response.data.message);
         } finally {
           set({ isUpdatingProfile: false });
+        }
+      },
+
+      //logout ka feature done
+      logout: async () => {
+        try {
+          await axiosInstance.post("/auth/logout");
+          set({ authUser: null });
+          toast.success("Logged out successfully");
+        } catch (error) {
+          toast.error(error.response.data.message);
         }
       },
       

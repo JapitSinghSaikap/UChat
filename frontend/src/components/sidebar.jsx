@@ -2,26 +2,27 @@ import { chatCheck } from "../store/chatCheck";
 import { authCheck } from "../store/authCheck";
 import { Users } from "lucide-react";
 import SidebarSkeleton from "../skeletons/sidebarSkeleton";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const Sidebar = () => {
   const { getUsers, users = [], selectedUser, setSelectedUser, isUsersLoading } = chatCheck();
-  const { onlineUsers = [] } = authCheck();
+  const { onlineUsers = [], loggedInUser } = authCheck(); 
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
-  const filtered = showOnlineOnly
-    ? users.filter((user) => onlineUsers?.includes(user._id))
-    : users;
+  
+  const filtered = users
+    .filter((user) => user._id !== loggedInUser?._id) 
+    .filter((user) => (showOnlineOnly ? onlineUsers?.includes(user._id) : true)); 
 
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
-    <aside className="h-full w-20 lg:w-72  border-base-300 flex flex-col transition-all duration-200 bg-[#211f1f]">
-      <div className="border-b border-base-300 w-full p-5">
+    <aside className="h-full w-20 lg:w-72  flex flex-col transition-all duration-200 bg-[#211f1f]">
+      <div className="border-b  w-full p-5">
         <div className="flex items-center gap-2">
           <Users className="size-6" />
           <span className="font-medium hidden lg:block">Contacts</span>
@@ -59,6 +60,5 @@ const Sidebar = () => {
     </aside>
   );
 };
-
 
 export default Sidebar;

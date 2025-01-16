@@ -14,4 +14,4 @@ cloudinary.config({
 
 console.log("Cloudinary Config:", cloudinary.config()); 
 
-module.exports = cloudinary; // Export directly
+module.exports = cloudinary; 
