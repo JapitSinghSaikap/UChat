@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { authCheck } from "../store/authCheck";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Mail, User,Edit3 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = authCheck();
   const [selectedImg, setSelectedImg] = useState(null);
+  const [bio, setBio] = useState(authUser?.bio || "");
+  const [isEditingBio, setIsEditingBio] = useState(false);
 
   const handleUpload = async (e) => {
     const file = e.target.files[0];
@@ -25,6 +27,16 @@ const ProfilePage = () => {
         console.error("Error updating profile picture:", error);
       }
     };
+  };
+
+
+  const handleBioUpdate = async () => {
+    try {
+      await updateProfile({ bio });
+      setIsEditingBio(false);
+    } catch (error) {
+      console.error("Error updating bio:", error);
+    }
   };
 
   return (
@@ -50,7 +62,7 @@ const ProfilePage = () => {
                         />
                         {!selectedImg && !authUser?.profilePic && (
                           <div className="absolute inset-0 flex items-center justify-center text-[#f0f0f0] text-sm font-semibold">
-                            Profile
+                            
                           </div>
                         )}
                       </div>
@@ -102,6 +114,44 @@ const ProfilePage = () => {
             </div>
           </div>
 
+          <div className="space-y-6">
+            <div className="space-y-1.5">
+              <div className="text-sm text-[#f0f0f0] flex items-center gap-2">
+                <Edit3 className="w-4 h-4" />
+                Bio
+              </div>
+              {isEditingBio ? (
+                <div className="flex gap-2 items-center">
+                  <textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    rows="3"
+                    className="px-4 py-2.5 bg-[#222222] rounded-lg border border-[#444444] text-[#f0f0f0] w-full resize-none"
+                    placeholder="Write something about yourself..."
+                  ></textarea>
+                  <button
+                    onClick={handleBioUpdate}
+                    className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                  >
+                    Save
+                  </button>
+                </div>
+              ) : (
+                <div className="flex justify-between items-center">
+                  <p className="px-4 py-2.5 bg-[#222222] rounded-lg border border-[#444444] text-[#f0f0f0] w-full">
+                    {bio || "No bio provided"}
+                  </p>
+                  <button
+                    onClick={() => setIsEditingBio(true)}
+                    className="text-sm text-blue-400 hover:underline"
+                  >
+                    Edit
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="mt-6 bg-[#181818] rounded-xl p-6">
             <h2 className="text-lg font-medium mb-4 text-[#f0f0f0]">Account Information</h2>
             <div className="space-y-3 text-sm">
@@ -109,9 +159,9 @@ const ProfilePage = () => {
                 <span className="text-[#f0f0f0]">Member Since</span>
                 <span className="text-[#b3b3b3]">
                   {authUser?.createdAt
-                    ? authUser.createdAt.split("T")[0]
+                    ? new Date(authUser.createdAt).toISOString().split("T")[0]
                     : "N/A"}
-                </span>
+              </span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <span className="text-[#f0f0f0]">Account Status</span>

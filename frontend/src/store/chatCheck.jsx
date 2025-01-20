@@ -1,11 +1,8 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { authCheck } from "./authCheck";
+import {authCheck} from "../store/authCheck"
 
-//yeh sara state management ke liye kiya ja rha 
-//in depth jake smjhna pdhega for big projects
-//abhi itne se kam chalana pdhega
 export const chatCheck = create((set, get) => ({
   messages: [],
   users: [],
@@ -19,69 +16,68 @@ export const chatCheck = create((set, get) => ({
       const res = await axiosInstance.get("/messages/users");
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Failed to fetch users";
+      toast.error(errorMessage);
     } finally {
       set({ isUsersLoading: false });
     }
   },
 
-  //messages wali side lane ke liye
+
   getMessages: async (userId) => {
     set({ isMessagesLoading: true });
     try {
       const res = await axiosInstance.get(`/messages/${userId}`);
       set({ messages: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Failed to fetch messages";
+      toast.error(errorMessage);
     } finally {
       set({ isMessagesLoading: false });
     }
   },
 
-  //mesage ke ana jana
+  
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
+    if (!selectedUser) {
+      toast.error("No user selected for the chat.");
+      return;
+    }
     try {
       const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
       set({ messages: [...messages, res.data] });
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Failed to send message";
+      toast.error(errorMessage);
     }
   },
 
-  // chat mein jane ke liye
+ 
   subscribeToMessages: () => {
-    const { selectedUser } = get();
+    const { selectedUser, messages } = get();
     if (!selectedUser) return;
 
     const socket = authCheck.getState().socket;
 
-    if (!socket) {
-      console.error("Socket not initialized yet");
-      return;  
-    }
+    socket.off("newMessage");
 
     socket.on("newMessage", (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-      if (!isMessageSentFromSelectedUser) return;
-
-      set({
-        messages: [...get().messages, newMessage],
-      });
+      if (
+        newMessage.senderId === selectedUser._id ||
+        newMessage.receiverId === selectedUser._id
+      ) {
+        set({ messages: [...messages, newMessage] });
+      }
     });
   },
 
-  //chat cut krne ke liye
+
   unsubscribeFromMessages: () => {
     const socket = authCheck.getState().socket;
-
-    if (!socket) {
-      console.error("Socket not initialized yet");
-      return;  // Early return if socket isn't available
-    }
-
     socket.off("newMessage");
   },
+
 
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 }));

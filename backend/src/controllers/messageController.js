@@ -1,5 +1,8 @@
 const User = require("../models/user.model");
 const Message = require("../models/messageModel");
+const cloudinary = require("../lib/cloudinary");
+const { getReceiverSocketId, io } = require("../lib/socket.js");
+
 
 exports.getUsers = async (req, res) => {
   try {
@@ -33,23 +36,34 @@ exports.getMessages = async (req, res) => {
 
 exports.sendMessage = async (req, res) => {
   try {
-    const { text } = req.body;
-    const { id: receiverId } = req.params; 
+    const { text, image } = req.body;
+    const { id: receiverId } = req.params;
     const senderId = req.user._id;
+
+    let imageUrl;
+    if (image) {
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
+    }
 
     const newMessage = new Message({
       senderId,
       receiverId,
       text,
-      // image: imageUrl, // Uncomment and handle image logic if needed
+      image: imageUrl,
     });
 
-    // Save the message to the database
     await newMessage.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
 
     res.status(201).json(newMessage);
   } catch (error) {
-    console.error("Error in sending message", error.message);
-    return res.status(500).json({ message: "Internal Server Error" });
+    console.log("Error in sendMessage controller: ", error.message);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+

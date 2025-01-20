@@ -6,11 +6,12 @@ const messageRoutes = require("./routes/messageRoutes");
 const cookieParser = require("cookie-parser");
 const otpRoutes = require("./routes/otpRoutes")
 const cors = require("cors");
+const  { app, server } = require("./lib/socket.js");
 
 
 dotenv.config();
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 5000;
 
 
@@ -26,7 +27,7 @@ app.use("/api/messages", messageRoutes);
 app.use('/api/otp', otpRoutes);
 
 
-app.listen(PORT, () => {
-  console.log(`Server listening at ${PORT}`);
+server.listen(PORT, () => {
+  console.log("server is running on PORT:" + PORT);
   connectDB();
 });

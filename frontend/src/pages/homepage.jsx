@@ -7,8 +7,8 @@ const HomePage = () => {
   const { selectedUser } = chatCheck();
 
   return (
-    <div className=" h-screen bg-[#121212]">
-      <div className="  flex items-center justify-center pt-20 px-4 bg-[#181818]">
+    <div className=" h-screen bg-[#757373]">
+      <div className="  flex items-center justify-center pt-20 px-4 ">
         <div className="bg-base-100 rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-8rem)]">
           <div className="flex h-full rounded-l`g overflow-hidden">
             <Sidebar />
