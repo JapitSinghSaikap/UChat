@@ -7,7 +7,7 @@ const SidebarSkeleton = () => {
     <aside
       className="h-full w-20 lg:w-72 border-r bg-[#211f1f] border-black  
     flex flex-col shadow-lg transition-all duration-400"
-    >
+    > 
       <div className="border-b border-gray-200 w-full p-5 bg-gradient-to-r from-white via-black to-[#211f1f] text-white">
         <div className="flex items-center gap-2">
           <Users className="w-6 h-6 text-white" />
